@@ -9,6 +9,7 @@ const envSchema = z.object({
   GEMINI_MODEL: z.string().default("gemini-2.5-flash"),
   GOOGLE_EMBEDDINGS_MODEL: z.string().default("text-embedding-004"),
   VECTOR_STORE_PATH: z.string().default("./data/vectors"),
+  DOCUMENTS_PATH: z.string().default("./data/documents"),
 });
 
 export type Env = z.infer<typeof envSchema>;
