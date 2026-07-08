@@ -45,11 +45,20 @@ docs/
     diagrams/
 
 specs/
-    prompts/
+
+prompts/
+
+data/
+    documents/
+    vectors/
 
 README.md
 CLAUDE.md
 ```
+
+`prompts/` lives at the repository root rather than nested under `specs/`: it holds the reusable AI-workflow prompts (planning, implementation, review, refactor) that drive work across the whole repository, not feature specifications themselves, so it is a peer of `specs/` rather than a child of it.
+
+`data/` holds runtime artifacts consumed by the backend: `documents/` is the fixed sample corpus (tracked in git), `vectors/` is the local LanceDB store generated at ingestion time (git-ignored, see [ADR-003](003-vector-store.md)).
 
 ---
 
