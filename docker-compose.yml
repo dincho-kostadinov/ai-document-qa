@@ -16,5 +16,10 @@ services:
     ports:
       - "3000:3000"
     env_file: .env
+    environment:
+      # .env's PORT is the backend's port (4000); Next.js also honors PORT,
+      # so without this override the frontend would try to listen on 4000
+      # too, leaving nothing bound to the 3000 this service actually maps.
+      - PORT=3000
     depends_on:
       - backend

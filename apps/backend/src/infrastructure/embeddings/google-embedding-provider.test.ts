@@ -15,7 +15,7 @@ describe("GoogleEmbeddingProvider", () => {
       embeddings: [{ values: [0.1, 0.2] }, { values: [0.3, 0.4] }],
     }));
 
-    const provider = new GoogleEmbeddingProvider(client, "text-embedding-004");
+    const provider = new GoogleEmbeddingProvider(client, "gemini-embedding-001");
 
     await expect(provider.embed(["a", "b"])).resolves.toEqual([
       [0.1, 0.2],
@@ -30,7 +30,7 @@ describe("GoogleEmbeddingProvider", () => {
       return { embeddings: [] };
     });
 
-    const provider = new GoogleEmbeddingProvider(client, "text-embedding-004");
+    const provider = new GoogleEmbeddingProvider(client, "gemini-embedding-001");
 
     await expect(provider.embed([])).resolves.toEqual([]);
     expect(called).toBe(false);
@@ -41,7 +41,7 @@ describe("GoogleEmbeddingProvider", () => {
       throw new Error("network down");
     });
 
-    const provider = new GoogleEmbeddingProvider(client, "text-embedding-004");
+    const provider = new GoogleEmbeddingProvider(client, "gemini-embedding-001");
 
     await expect(provider.embed(["a"])).rejects.toThrow(EmbeddingGenerationError);
   });
@@ -49,7 +49,7 @@ describe("GoogleEmbeddingProvider", () => {
   it("throws when the response embedding count does not match the request", async () => {
     const client = makeClient(async () => ({ embeddings: [{ values: [0.1] }] }));
 
-    const provider = new GoogleEmbeddingProvider(client, "text-embedding-004");
+    const provider = new GoogleEmbeddingProvider(client, "gemini-embedding-001");
 
     await expect(provider.embed(["a", "b"])).rejects.toThrow(EmbeddingGenerationError);
   });
@@ -57,7 +57,7 @@ describe("GoogleEmbeddingProvider", () => {
   it("throws when a returned embedding has no values", async () => {
     const client = makeClient(async () => ({ embeddings: [{ values: undefined }] }));
 
-    const provider = new GoogleEmbeddingProvider(client, "text-embedding-004");
+    const provider = new GoogleEmbeddingProvider(client, "gemini-embedding-001");
 
     await expect(provider.embed(["a"])).rejects.toThrow(EmbeddingGenerationError);
   });

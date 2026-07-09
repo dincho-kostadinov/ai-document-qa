@@ -20,7 +20,7 @@ const testEnv: Env = {
   CORS_ORIGIN: "http://localhost:3000",
   GEMINI_API_KEY: "test-key",
   GEMINI_MODEL: "gemini-2.5-flash",
-  GOOGLE_EMBEDDINGS_MODEL: "text-embedding-004",
+  GOOGLE_EMBEDDINGS_MODEL: "gemini-embedding-001",
   VECTOR_STORE_PATH: "./data/vectors",
   DOCUMENTS_PATH: "./data/documents",
   CHUNK_SIZE: 800,
