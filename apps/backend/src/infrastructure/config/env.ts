@@ -13,6 +13,7 @@ const envSchema = z.object({
   CHUNK_OVERLAP: z.coerce.number().default(200),
   SIMILARITY_TOP_K: z.coerce.number().default(5),
   SIMILARITY_THRESHOLD: z.coerce.number().default(0.5),
+  GEMINI_TEMPERATURE: z.coerce.number().default(0),
 });
 
 export type Env = z.infer<typeof envSchema>;
