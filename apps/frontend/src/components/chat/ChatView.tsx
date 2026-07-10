@@ -7,6 +7,7 @@ import { askQuestion } from "../../lib/api/questions-client";
 import type { AnswerResponseDto } from "../../lib/api/types";
 
 import { AnswerResult } from "./AnswerResult";
+import styles from "./ChatView.module.css";
 import { ErrorBanner } from "./ErrorBanner";
 import { QuestionForm } from "./QuestionForm";
 
@@ -37,11 +38,16 @@ export function ChatView() {
   }
 
   return (
-    <main>
-      <h1>AI Document Q&amp;A</h1>
-      <QuestionForm isLoading={state.phase === "loading"} onSubmit={handleSubmit} />
-      {state.phase === "error" && state.errorMessage && <ErrorBanner message={state.errorMessage} />}
-      {state.answer && <AnswerResult answer={state.answer} />}
+    <main className={styles.page}>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>AI Document Q&amp;A</h1>
+          <p className={styles.subtitle}>Ask a question and get an answer sourced from your documents.</p>
+        </div>
+        <QuestionForm isLoading={state.phase === "loading"} onSubmit={handleSubmit} />
+        {state.phase === "error" && state.errorMessage && <ErrorBanner message={state.errorMessage} />}
+        {state.answer && <AnswerResult answer={state.answer} />}
+      </div>
     </main>
   );
 }

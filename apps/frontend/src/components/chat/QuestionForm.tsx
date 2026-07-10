@@ -3,6 +3,8 @@
 import { useState } from "react";
 import type { FormEvent, KeyboardEvent } from "react";
 
+import styles from "./QuestionForm.module.css";
+
 interface QuestionFormProps {
   isLoading: boolean;
   onSubmit: (question: string) => void;
@@ -34,8 +36,9 @@ export function QuestionForm({ isLoading, onSubmit }: QuestionFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className={styles.form} onSubmit={handleSubmit}>
       <textarea
+        className={styles.textarea}
         value={question}
         onChange={(event) => setQuestion(event.target.value)}
         onKeyDown={handleKeyDown}
@@ -44,9 +47,17 @@ export function QuestionForm({ isLoading, onSubmit }: QuestionFormProps) {
         placeholder="Ask a question about the documents..."
         rows={3}
       />
-      <button type="submit" disabled={isLoading || question.trim().length === 0}>
-        {isLoading ? "Thinking…" : "Ask"}
-      </button>
+      <div className={styles.footer}>
+        <span className={styles.hint}>Enter to send · Shift+Enter for a new line</span>
+        <button
+          type="submit"
+          className={styles.submit}
+          disabled={isLoading || question.trim().length === 0}
+        >
+          {isLoading && <span className={styles.spinner} aria-hidden="true" />}
+          {isLoading ? "Thinking…" : "Ask"}
+        </button>
+      </div>
     </form>
   );
 }
