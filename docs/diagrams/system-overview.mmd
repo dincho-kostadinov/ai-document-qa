@@ -1,0 +1,54 @@
+flowchart TB
+    USER(["Enterprise user"])
+
+    subgraph FRONTEND["Frontend — Next.js (apps/frontend)"]
+        UI["ChatView\nquestion form + answer + sources"]
+    end
+
+    subgraph BACKEND["Backend — Express (apps/backend)"]
+        API["POST /api/questions\nvalidate → orchestrate → map DTO"]
+
+        subgraph STARTUP["Startup indexing (once, before the server listens)"]
+            DOCS[("data/documents/\n*.md, *.txt")]
+            LOADER["FileSystemDocumentLoader"]
+            CHUNK["chunkDocument\n800 chars / 200 overlap"]
+            INDEXUC["IndexDocumentsUseCase"]
+            DOCS --> LOADER --> CHUNK --> INDEXUC
+        end
+
+        subgraph QUERY["Per-question flow"]
+            SEARCHUC["SearchSimilarChunksUseCase"]
+            ANSWERUC["GenerateAnswerUseCase"]
+            PROMPT["buildContext / buildPrompt\nsystem-prompt.ts"]
+            SEARCHUC --> ANSWERUC
+            ANSWERUC --> PROMPT
+        end
+
+        EMB["GoogleEmbeddingProvider"]
+        GEN["GoogleAnswerGenerator"]
+        VSTORE[("LanceDB\ndata/vectors")]
+
+        API --> SEARCHUC
+        INDEXUC --> EMB
+        SEARCHUC --> EMB
+        ANSWERUC --> GEN
+        EMB --> VSTORE
+        INDEXUC --> VSTORE
+        SEARCHUC -- "top-K chunks" --> VSTORE
+        ANSWERUC --> API
+    end
+
+    GEMINI{{"Google Gemini API\nembeddings + gemini-2.5-flash"}}
+
+    USER -- "ask a question" --> UI
+    UI -- "POST /api/questions" --> API
+    API -- "answer + grounded + sources" --> UI
+    UI -- "renders answer" --> USER
+
+    EMB -.-> GEMINI
+    GEN -- "structured JSON\n{ grounded, answer, citations }" --> GEMINI
+
+    classDef store fill:#2b2b2b,stroke:#888,color:#fff;
+    class DOCS,VSTORE store;
+    classDef ext fill:#1a3a5c,stroke:#5b9bd5,color:#fff;
+    class GEMINI ext;

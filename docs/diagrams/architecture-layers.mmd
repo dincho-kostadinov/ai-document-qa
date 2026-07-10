@@ -1,0 +1,12 @@
+flowchart TB
+    FE["Frontend\nNext.js (apps/frontend)\nChatView, QuestionForm, AnswerResult"]
+    PRES["Presentation\nExpress Routes / DTOs\nquestions.route.ts · validateBody · errorHandler"]
+    APP["Application\nUse Cases\nIndexDocumentsUseCase · SearchSimilarChunksUseCase · GenerateAnswerUseCase"]
+    DOMAIN["Domain\nPorts / Entities\nDocumentLoader · EmbeddingProvider · VectorStore · AnswerGenerator\nDocument · Chunk · Answer"]
+    INFRA["Infrastructure\nGemini · LanceDB · Loader\nGoogleEmbeddingProvider · GoogleAnswerGenerator · LanceDbVectorStore · FileSystemDocumentLoader"]
+
+    FE --> PRES --> APP --> DOMAIN --> INFRA
+    INFRA -. implements domain ports .-> DOMAIN
+
+    classDef layer fill:#1a1a1a,stroke:#888,color:#fff,stroke-width:1px;
+    class FE,PRES,APP,DOMAIN,INFRA layer;
